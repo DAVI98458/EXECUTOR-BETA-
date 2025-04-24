@@ -1,0 +1,183 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+
+--[[ 
+Executor - Criado por @coroadinho_37203 and deku080539
+Versão: Android (Roblox v2.669.664)
+]]
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+gui.Name = "MobileExecutor"
+gui.ResetOnSpawn = false
+
+local function antiCheat()
+	for _, obj in ipairs(game:GetDescendants()) do
+		if obj:IsA("RemoteEvent") or obj:IsA("RemoteFunction") then
+			if obj.Name:lower():find("bypass") or obj.Name:lower():find("hack") then
+				player:Kick("Anti-Cheat: comportamento suspeito detectado.")
+			end
+		end
+	end
+end
+
+local scripts = {
+	ESP = "print('ESP ativado')",
+	Aimbot = "print('Aimbot ativado')",
+	Fly = "print('Fly ativado')",
+	Speed = "print('Speed ativado')",
+	GodMode = "print('GodMode ativado')",
+}
+
+local openBtn = Instance.new("TextButton", gui)
+openBtn.Size = UDim2.new(0, 140, 0, 40)
+openBtn.Position = UDim2.new(0.02, 0, 0.05, 0)
+openBtn.Text = "Abrir Executor"
+openBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 120)
+openBtn.TextColor3 = Color3.new(1, 1, 1)
+openBtn.Font = Enum.Font.GothamBold
+openBtn.TextScaled = true
+
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0.9, 0, 0.65, 0)
+frame.Position = UDim2.new(0.05, 0, 0.2, 0)
+frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+frame.BorderSizePixel = 0
+frame.Visible = false
+
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.new(1, 0, 0.1, 0)
+title.Text = "Executor - Criado por @coroadinho_37203 and deku080539"
+title.TextColor3 = Color3.new(1, 1, 1)
+title.BackgroundTransparency = 1
+title.Font = Enum.Font.GothamBold
+title.TextScaled = true
+
+local input = Instance.new("TextBox", frame)
+input.Size = UDim2.new(1, -20, 0.4, 0)
+input.Position = UDim2.new(0, 10, 0.12, 0)
+input.PlaceholderText = "-- Digite seu script aqui"
+input.ClearTextOnFocus = false
+input.MultiLine = true
+input.TextWrapped = true
+input.TextYAlignment = Enum.TextYAlignment.Top
+input.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+input.TextColor3 = Color3.new(1, 1, 1)
+input.Font = Enum.Font.Code
+input.TextSize = 14
+
+local search = Instance.new("TextBox", frame)
+search.Size = UDim2.new(1, -20, 0.1, 0)
+search.Position = UDim2.new(0, 10, 0.54, 0)
+search.PlaceholderText = "Pesquisar scripts (ex: ESP)"
+search.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+search.TextColor3 = Color3.new(1, 1, 1)
+search.Font = Enum.Font.Gotham
+search.TextScaled = true
+
+local resultsFrame = Instance.new("Frame", frame)
+resultsFrame.Size = UDim2.new(1, -20, 0.18, 0)
+resultsFrame.Position = UDim2.new(0, 10, 0.65, 0)
+resultsFrame.BackgroundTransparency = 1
+
+local function updateResults(query)
+	for _, child in pairs(resultsFrame:GetChildren()) do
+		if child:IsA("TextButton") then child:Destroy() end
+	end
+
+	for name, code in pairs(scripts) do
+		if name:lower():find(query:lower()) then
+			local btn = Instance.new("TextButton", resultsFrame)
+			btn.Size = UDim2.new(1, 0, 0, 30)
+			btn.Text = "Executar: " .. name
+			btn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+			btn.TextColor3 = Color3.new(1, 1, 1)
+			btn.Font = Enum.Font.GothamBold
+			btn.TextScaled = true
+			btn.MouseButton1Click:Connect(function()
+				antiCheat()
+				loadstring(code)()
+			end)
+		end
+	end
+end
+
+search:GetPropertyChangedSignal("Text"):Connect(function()
+	updateResults(search.Text)
+end)
+
+local run = Instance.new("TextButton", frame)
+run.Size = UDim2.new(0.48, 0, 0.08, 0)
+run.Position = UDim2.new(0, 10, 0.85, 0)
+run.Text = "Executar"
+run.BackgroundColor3 = Color3.fromRGB(60, 130, 60)
+run.TextColor3 = Color3.new(1, 1, 1)
+run.Font = Enum.Font.GothamBold
+run.TextScaled = true
+
+local save = Instance.new("TextButton", frame)
+save.Size = UDim2.new(0.48, 0, 0.08, 0)
+save.Position = UDim2.new(0.5, -10, 0.85, 0)
+save.Text = "Salvar"
+save.BackgroundColor3 = Color3.fromRGB(40, 40, 120)
+save.TextColor3 = Color3.new(1, 1, 1)
+save.Font = Enum.Font.GothamBold
+save.TextScaled = true
+
+local devListBtn = Instance.new("TextButton", gui)
+devListBtn.Size = UDim2.new(0, 220, 0, 40)
+devListBtn.Position = UDim2.new(0.25, 0, 0.05, 0)
+devListBtn.Text = "Abrir lista de scripts definidos pelo desenvolvedor"
+devListBtn.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+devListBtn.TextColor3 = Color3.new(1, 1, 1)
+devListBtn.Font = Enum.Font.GothamBold
+devListBtn.TextScaled = true
+
+local devFrame = Instance.new("Frame", gui)
+devFrame.Size = UDim2.new(0.3, 0, 0.5, 0)
+devFrame.Position = UDim2.new(0.35, 0, 0.2, 0)
+devFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+devFrame.Visible = false
+
+local devLayout = Instance.new("UIListLayout", devFrame)
+devLayout.FillDirection = Enum.FillDirection.Vertical
+devLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+for name, code in pairs(scripts) do
+	local btn = Instance.new("TextButton", devFrame)
+	btn.Size = UDim2.new(1, 0, 0, 30)
+	btn.Text = name
+	btn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+	btn.TextColor3 = Color3.new(1, 1, 1)
+	btn.Font = Enum.Font.GothamBold
+	btn.TextScaled = true
+	btn.MouseButton1Click:Connect(function()
+		input.Text = code
+	end)
+end
+
+devListBtn.MouseButton1Click:Connect(function()
+	devFrame.Visible = not devFrame.Visible
+end)
+
+run.MouseButton1Click:Connect(function()
+	antiCheat()
+	local success, err = pcall(function()
+		loadstring(input.Text)()
+	end)
+	if not success then
+		warn("Erro ao executar script: ", err)
+	end
+end)
+
+save.MouseButton1Click:Connect(function()
+	player:SetAttribute("SavedScript", input.Text)
+end)
+
+if player:GetAttribute("SavedScript") then
+	input.Text = player:GetAttribute("SavedScript")
+end
+
+openBtn.MouseButton1Click:Connect(function()
+	frame.Visible = not frame.Visible
+end)
